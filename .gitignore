@@ -1,6 +1,7 @@
-#PyCharm
-_MACOSX_/
 
+#PyCharm
+_MACOSX\
+.idea
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
