@@ -8,6 +8,14 @@ class RouterNode():
     sim = None
     costs = None
 
+    INIFINITY = 9999
+
+    # Varible dclaration
+    neighbourCosts = None
+    minCosts = None
+    nextHop = None
+    PoisonReverse = False
+
     # Access simulator variables with:
     # self.sim.POISONREVERSE, self.sim.NUM_NODES, etc.
 
@@ -16,6 +24,15 @@ class RouterNode():
         self.myID = ID
         self.sim = sim
         self.myGUI = GuiTextArea.GuiTextArea("  Output window for Router #" + str(ID) + "  ")
+
+        # Initialize class variables
+        print("INSTANCE %d" % ID) 
+        self.neighbourCosts = [[self.INIFINITY]*self.sim.NUM_NODES] * self.sim.NUM_NODES
+        self.neighbourCosts[ID] = costs
+        print(self.neighbourCosts)
+
+        #self.minCosts = {self.infinity}
+
 
         self.costs = deepcopy(costs)
 
@@ -34,6 +51,7 @@ class RouterNode():
     def printDistanceTable(self):
         self.myGUI.println("Current table for " + str(self.myID) +
                            "  at time " + str(self.sim.getClocktime()))
+        self.myGUI.print(self.neighbourCosts)
 
 
     # --------------------------------------------------
