@@ -43,15 +43,12 @@ class RouterNode():
     def recvUpdate(self, pkt):
         self.neighbourCosts[pkt.sourceid] = pkt.mincost
         for i in range (self.sim.NUM_NODES):
-            if (i==self.myID):
-                self.minCosts[i]=0
-            else:
-
-                self.minCosts[i]=min(self.mincosts[i],
-                                     self.neighbourCosts[self.myID][pkt.sourceid]+self.neighbourCosts[pkt.sourceid][i])
-
-        if self.neighbourCosts[self.myID] != self.minCosts:
-            self.neighbourCosts[self.myID] = self.minCosts
+            if (i!=self.myID):
+                newCost = self.neighbourCosts[self.myID][pkt.sourceid] + pkt.mincost[i]
+                if(self.minCosts[i] > newCost):
+                    self.minCosts[i] = newCost
+                    self.neighbourCosts[self.myID][i] = self.minCosts[i]
+                    self.nextHop[i] = pkt.sourceid
 
 
         pass
