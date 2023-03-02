@@ -24,15 +24,24 @@ class RouterNode():
         self.myGUI = GuiTextArea.GuiTextArea("  Output window for Router #" + str(ID) + "  ")
 
         # Initialize class variables
+        self.PoisonReverse = self.sim.POISONREVERSE
+        self.minCosts = costs
+
         self.neighbourCosts = [[self.sim.INFINITY]*self.sim.NUM_NODES] * self.sim.NUM_NODES
         self.neighbourCosts[ID] = costs
+
+        #self.minCosts = [self.sim.INFINITY] * self.sim.NUM_NODES
+        
+        for i in range(self.sim.NUM_NODES):
+                if (self.neighbourCosts[ID][i] < self.sim.INFINITY):
+                    self.nextHop[i] = i
+                else :
+                    self.nextHop[i] = -1
+
         print("INSTANCE %d" % ID) 
         print(self.neighbourCosts)
-
-        self.minCosts = [self.sim.INFINITY] * self.sim.NUM_NODES
-        self.nextHop = [self.sim.INFINITY] * self.sim.NUM_NODES
-        self.PoisonReverse = self.sim.POISONREVERSE
-
+        print(self.minCosts)
+        print(self.nextHop)
 
         self.costs = deepcopy(costs)
 
