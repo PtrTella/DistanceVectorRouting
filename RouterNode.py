@@ -38,21 +38,22 @@ class RouterNode():
         print(self.minCosts)
         print(self.nextHop)
 
-    def minCostUpdate(self):
-        for i in range(self.sim.NUM_NODES):
-            if (i != self.myID):
-                self.minCosts[i] = self.sim.INFINITY
-                for j in range(self.sim.NUM_NODES):
-                    if (self.neighbourCosts[j][i] < self.sim.INFINITY):
-                        self.minCosts[i] = min(self.minCosts[i], self.neighbourCosts[j][i] + self.minCosts[j])
-                        if (self.minCosts[i] == self.neighbourCosts[j][i] + self.minCosts[j]):
-                            self.nextHop[i] = j
-        print(self.minCosts)
-
+    
     # --------------------------------------------------
     def recvUpdate(self, pkt):
         self.neighbourCosts[pkt.sourceid] = pkt.mincost
-        self.minCosts = deepcopy(self.neighbourCosts[self.myID])
+        for i in range (self.sim.NUM_NODES):
+            if (i==self.myID):
+                self.minCosts[i]=0
+            else:
+
+                self.minCosts[i]=min(self.mincosts[i],
+                                     self.neighbourCosts[self.myID][pkt.sourceid]+self.neighbourCosts[pkt.sourceid][i])
+
+        if self.neighbourCosts[self.myID] != self.minCosts:
+            self.neighbourCosts[self.myID] = self.minCosts
+
+
         pass
 
 
