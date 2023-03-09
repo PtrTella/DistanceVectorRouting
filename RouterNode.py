@@ -12,7 +12,9 @@ class RouterNode():
     neighbourCosts = None
     minCosts = None
     nextHop = None
-    PoisonReverse = False
+    poisonReverse = False
+    immidiateNeighbours = None
+    
 
     # Access simulator variables with:
     # self.sim.POISONREVERSE, self.sim.NUM_NODES, etc.
@@ -24,8 +26,9 @@ class RouterNode():
         self.myGUI = GuiTextArea.GuiTextArea("  Output window for Router #" + str(ID) + "  ")
 
         # Initialize class variables
-        self.PoisonReverse = self.sim.POISONREVERSE
+        self.poisonReverse = self.sim.POISONREVERSE
         self.minCosts = deepcopy(costs)
+        self.immidiateNeighbours = self.minCosts
         self.neighbourCosts = [[self.sim.INFINITY]*self.sim.NUM_NODES] * self.sim.NUM_NODES
         self.neighbourCosts[ID] = costs        
         self.nextHop = [-1] * self.sim.NUM_NODES
@@ -49,17 +52,15 @@ class RouterNode():
                     self.minCosts[i] = newCost
                     self.neighbourCosts[self.myID][i] = self.minCosts[i]
                     self.nextHop[i] = pkt.sourceid
-
-
-        pass
-
+                    self.sendUpdate()
 
     # --------------------------------------------------
-    def sendUpdate(self, pkt):
-        pkt.sourceid = self.myID
-        pkt.mincost = deepcopy(self.minCosts)
-        pkt.destid = F.ALLNODES
-        self.sim.toLayer2(pkt)
+    def sendUpdate(self):
+
+        for i in range(self.sim.NUM_NODES):
+            if (self.immidiateNeighbours[i] != self.sim.INFINITY and i != self.myID):
+                pkt = RouterPacket.RouterPacket(self.myID, i, deepcopy(self.minCosts))
+                self.sim.toLayer2(pkt)
 
 
     # --------------------------------------------------
