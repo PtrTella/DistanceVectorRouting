@@ -14,6 +14,7 @@ class RouterNode():
     nextHop = None
     poisonReverse = False
     immidiateNeighbours = None
+    prevNeighbourCosts = None
     
 
     # Access simulator variables with:
@@ -36,10 +37,16 @@ class RouterNode():
                 if (costs[i] < self.sim.INFINITY):
                     self.nextHop[i] = i
 
+        self.sendUpdate()
+
         print("NODE %d" % ID) 
         print(self.neighbourCosts)
         print(self.minCosts)
         print(self.nextHop)
+
+        self.myGUI.println("Initialized router " + str(ID) + " with costs: " + str(costs) + "\n") 
+        self.printDistanceTable()
+        self.prevNeighbourCosts = deepcopy(self.neighbourCosts)
 
     
     # --------------------------------------------------
@@ -65,10 +72,28 @@ class RouterNode():
 
     # --------------------------------------------------
     def printDistanceTable(self):
-        self.myGUI.println("Current table for " + str(self.myID) +
-                           "  at time " + str(self.sim.getClocktime()))
+        if(self.neighbourCosts != self.prevNeighbourCosts or True):
+            self.myGUI.println("Current table for " + str(self.myID) +
+                            "  at time " + str(self.sim.getClocktime()))
+            self.myGUI.println(str(self.neighbourCosts))
+            self.prevNeighbourCosts = deepcopy(self.neighbourCosts)
 
 
     # --------------------------------------------------
     def updateLinkCost(self, dest, newcost):
-        pass
+        self.myGUI.println("\nUpdating link cost from " + str(self.myID) + " to " + str(dest) + " of " + str(newcost) + "\n")
+        self.immidiateNeighbours[dest] = newcost
+        self.minCosts[dest] = newcost
+        self.neighbourCosts[self.myID][dest] = newcost
+
+        #self.minCosts[dest] = min(newcost, )
+        for i in range (self.sim.NUM_NODES):
+            if (i!=self.myID):
+                newCost = self.neighbourCosts[self.myID][dest] + self.neighbourCosts[].mincost[i]
+                if(self.minCosts[i] > newCost):
+                    self.minCosts[i] = newCost
+                    self.neighbourCosts[self.myID][i] = self.minCosts[i]
+                    self.nextHop[i] = pkt.sourceid
+                    self.sendUpdate()
+
+        #self.recvUpdate(RouterPacket.RouterPacket(dest, self.myID, self.minCosts))
