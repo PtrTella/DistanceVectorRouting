@@ -4,7 +4,6 @@ import RouterPacket
 import F
 from copy import deepcopy
 
-poisonActive = False
 
 class RouterNode():
     myID = None
@@ -100,7 +99,6 @@ class RouterNode():
 
 
             if (self.poisonReverse and self.nextHop[i] != i):
-                print("I'm poisoning")
                 self.myGUI.println("POSIONING")
                 fakeMinCosts = deepcopy(self.minCosts)
                 fakeMinCosts[i] = self.sim.INFINITY
@@ -149,8 +147,7 @@ class RouterNode():
     # --------------------------------------------------
 
     def updateLinkCost(self, dest, newcost):
-        self.poisonReverse = True
-        self.myGUI.println("POISONING ACTIVE " + str(poisonActive))
+        self.poisonReverse = self.sim.POISONREVERSE
         self.myGUI.println("updated link cost to " +
                            str(dest) + "(" + str(newcost) + ")")
 
