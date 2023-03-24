@@ -18,8 +18,8 @@
 # ******************************************************************
 
 class RouterSimulator():
-    NUM_NODES = 4         # Default value
-    LINKCHANGES = True  # Default value
+    NUM_NODES = 3         # Default value
+    LINKCHANGES = False  # Default value
     POISONREVERSE = False  # Default value
     SEED = 1234             # Default value
     TRACE = 3               # Default value

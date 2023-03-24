@@ -183,5 +183,3 @@ class RouterNode():
                 self.myGUI.println("At time " + str(self.sim.getClocktime()) +
                                " I'm sending my minimum cost " + str(self.minCosts) + "to " + str(pkt.destid))
                 self.sendUpdate(pkt)
-
-
